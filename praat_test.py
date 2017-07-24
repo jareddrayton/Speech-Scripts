@@ -5,13 +5,14 @@
 import subprocess
 import random
 
-n = 100
+# set number of artwords to be generated
+n = 10
 
+# Set length of artword sound
 length = '1.0'
 
-
 # Generate n number of artwords
-index = 1
+#index = 1
 
 # define praat location
 
@@ -51,7 +52,7 @@ def artword_generator(index):
     values = [round(random.uniform(-1, 1), 1) for x in range(len(parameters))]
 
     # creates a text file with the .praat extension by calling open and assigns to variable f
-    f = open("test.praat", 'w')
+    f = open("test{}.praat".format(index), 'w')
 
     f.write('Create Speaker... Robovox Male 2\r\n')
     f.write('Create Artword... Individual{!s} {}\r\n'.format(index, length))
@@ -60,7 +61,6 @@ def artword_generator(index):
     f.write('Set target... {}   0.0  Lungs\r\n'.format(length))
     f.write('Set target... 0.00 1 LevatorPalatini\r\n')
     f.write('Set target... {} 1 LevatorPalatini\r\n'.format(length))
-
 
     # a loop that
     for i in range(len(parameters)):
@@ -73,8 +73,11 @@ def artword_generator(index):
     f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
 
-def praat_cmd():
-    subprocess.run(['./praat', '--run', 'test.praat'])
+def praat_cmd(i):
+    subprocess.run(['./praat', '--run', 'test{!s}.praat'.format(i)])
 
-artword_generator(index)
-praat_cmd()
+for i in range(n):
+    artword_generator(i)
+
+for i in range(n):
+    praat_cmd(i)
