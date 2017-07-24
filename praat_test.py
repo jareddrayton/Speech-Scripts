@@ -46,12 +46,13 @@ def artword_generator(index):
     # Generate a list of n random values in the range [-1,1] with a list comprehension
     [round(random.uniform(-1, 1), 1) for x in range(len(parameters))]
 
+
     f = open("wdwd.praat", 'w')
 
     f.write("test")
     f.write("test")
     f.write('Create Speaker... Robovox Male 2\r\n')
-    f.write('Create Artword... Individual' + self.name + ' ' + length + '\r\n')
+    f.write('Create Artword... Individual' + str(index) + ' ' + length + '\r\n')
     f.write('Set target... 0.0  0.07  Lungs\r\n')
     f.write('Set target... 0.04  0.0  Lungs\r\n')
     f.write('Set target... %s   0.0  Lungs\r\n' % length)
