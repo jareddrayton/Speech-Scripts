@@ -9,6 +9,7 @@ n = 100
 
 length = '1.0'
 
+
 # define praat location
 
 def artword_generator(index):
@@ -44,37 +45,36 @@ def artword_generator(index):
                   'Buccinator']
 
     # Generate a list of n random values in the range [-1,1] with a list comprehension
-    [round(random.uniform(-1, 1), 1) for x in range(len(parameters))]
+    values = [round(random.uniform(-1, 1), 1) for x in range(len(parameters))]
 
-
+    # creates a text file with the .praat extension by calling open and assigns to variable f
     f = open("test.praat", 'w')
 
-    f.write("test")
-    f.write("test")
     f.write('Create Speaker... Robovox Male 2\r\n')
-    f.write('Create Artword... Individual' + str(index) + ' ' + length + '\r\n')
+    f.write('Create Artword... Individual{!s} {}\r\n'.format(index, length))
     f.write('Set target... 0.0  0.07  Lungs\r\n')
     f.write('Set target... 0.04  0.0  Lungs\r\n')
-    f.write('Set target... %s   0.0  Lungs\r\n' % length)
+    f.write('Set target... {}   0.0  Lungs\r\n'.format(length))
     f.write('Set target... 0.00 1 LevatorPalatini\r\n')
-    f.write('Set target... ' + length + ' 1 LevatorPalatini\r\n')
+    f.write('Set target... {} 1 LevatorPalatini\r\n'.format(length))
 
+
+    # a loop that
     for i in range(len(parameters)):
         f.seek(0, 2)
-        f.write('Set target... 0.0 ' + str(self.values[i]) + ' ' + self.parameters[i] + '\r\n')
-        f.write('Set target... ' + length + ' ' + str(self.values[i]) + ' ' + self.parameters[i] + '\r\n')
+        f.write('Set target... 0.0 {!s} {!s} \r\n'.format(values[i], parameters[i]))
+        f.write('Set target... {} {!s} {!s}\r\n'.format(length, values[i], parameters[i]))
 
-    f.write('select Artword Individual' + self.name + '\r\n')
+    f.write('select Artword Individual{!s}\r\n'.format(index))
     f.write('plus Speaker Robovox\r\n')
     f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
-    f.write('''nowarn do ("Save as WAV file...", "Individual''' + self.name + '''.wav")\r\n''')
+    f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
 
-
-
-# Generate n number of artowrds
+# Generate n number of artwords
 index = 1
 
 artword_generator(index)
+
 
 def praat_cmd():
     subprocess.run(praat - -run)
