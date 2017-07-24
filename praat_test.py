@@ -7,7 +7,7 @@ import random
 
 n = 100
 
-length
+length = '1.0'
 
 # define praat location
 
