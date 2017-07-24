@@ -4,15 +4,17 @@
 
 import subprocess
 import random
+import time
 
 # set number of artwords to be generated
-n = 10
+n = 4
 
 # Set length of artword sound
 length = '1.0'
 
+
 # Generate n number of artwords
-#index = 1
+# index = 1
 
 # define praat location
 
@@ -73,11 +75,31 @@ def artword_generator(index):
     f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
 
-def praat_cmd(i):
-    subprocess.run(['./praat', '--run', 'test{!s}.praat'.format(i)])
 
 for i in range(n):
     artword_generator(i)
 
-for i in range(n):
-    praat_cmd(i)
+
+def praat_serial():
+
+    start = time.time()
+
+    for i in range(n):
+        subprocess.run(['./praat', '--run', 'test{!s}.praat'.format(i)])
+
+    print(start - time.time())
+
+praat_serial()
+
+def praat_parallel():
+
+    start = time.time()
+
+    for i in range(n):
+        p = subprocess.Popen(['./praat', '--run', 'test{!s}.praat'.format(i)])
+
+    p.communicate()
+
+    print(start - time.time())
+
+praat_parallel()
