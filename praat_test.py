@@ -1,5 +1,5 @@
-# This script generates n random artwords with a duration of 1 second for synthesisng with praat.
-# This gives a rough estimate as to the performance with the Genetic Algorithm
+# This script generates n random artwords with arbitray duration for synthesisng with praat.
+# It is intended to give a rough estimate as to the single vs parallel performance.
 # Outputs a the total time, plus a rough how much faster than realtime simulation is.
 
 import subprocess
@@ -9,19 +9,14 @@ import time
 # set number of artwords to be generated
 n = 4
 
-# Set length of artword sound
-length = '1.0'
+# set the duration of each artword sound
+duration = '1.0'
 
-
-# Generate n number of artwords
-# index = 1
-
-# define praat location
 
 def artword_generator(index):
     """This function generates a random artword/praat script"""
 
-    # List of the articulator parameters
+    # a list containing all of the articulator parameters barring lungs
     parameters = ['Interarytenoid',
                   'Cricothyroid',
                   'Vocalis',
@@ -57,18 +52,18 @@ def artword_generator(index):
     f = open("test{}.praat".format(index), 'w')
 
     f.write('Create Speaker... Robovox Male 2\r\n')
-    f.write('Create Artword... Individual{!s} {}\r\n'.format(index, length))
+    f.write('Create Artword... Individual{!s} {}\r\n'.format(index, duration))
     f.write('Set target... 0.0  0.07  Lungs\r\n')
     f.write('Set target... 0.04  0.0  Lungs\r\n')
-    f.write('Set target... {}   0.0  Lungs\r\n'.format(length))
+    f.write('Set target... {}   0.0  Lungs\r\n'.format(duration))
     f.write('Set target... 0.00 1 LevatorPalatini\r\n')
-    f.write('Set target... {} 1 LevatorPalatini\r\n'.format(length))
+    f.write('Set target... {} 1 LevatorPalatini\r\n'.format(duration))
 
     # a loop that
     for i in range(len(parameters)):
         f.seek(0, 2)
         f.write('Set target... 0.0 {!s} {!s}\r\n'.format(values[i], parameters[i]))
-        f.write('Set target... {} {!s} {!s}\r\n'.format(length, values[i], parameters[i]))
+        f.write('Set target... {} {!s} {!s}\r\n'.format(duration, values[i], parameters[i]))
 
     f.write('select Artword Individual{!s}\r\n'.format(index))
     f.write('plus Speaker Robovox\r\n')
@@ -87,7 +82,10 @@ def praat_serial():
     for i in range(n):
         subprocess.run(['./praat', '--run', 'test{!s}.praat'.format(i)])
 
-    print(start - time.time())
+    end = round(time.time() - start, 2)
+
+    print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
+    print('This is equivalant to ', round(n * float(duration) / end, 2), 'x real time')
 
 praat_serial()
 
@@ -100,6 +98,9 @@ def praat_parallel():
 
     p.communicate()
 
-    print(start - time.time())
+    end = round(time.time() - start, 2)
+
+    print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
+    print('This is equivalant to ', round(n * float(duration) / end, 2), 'x real time')
 
 praat_parallel()
