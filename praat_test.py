@@ -10,12 +10,16 @@ n = 100
 length = '1.0'
 
 
+# Generate n number of artwords
+index = 1
+
+
 # define praat location
 
 def artword_generator(index):
     """This function generates a random artword/praat script"""
 
-    # List of articulator parameters
+    # List of the articulator parameters
     parameters = ['Interarytenoid',
                   'Cricothyroid',
                   'Vocalis',
@@ -62,7 +66,7 @@ def artword_generator(index):
     # a loop that
     for i in range(len(parameters)):
         f.seek(0, 2)
-        f.write('Set target... 0.0 {!s} {!s} \r\n'.format(values[i], parameters[i]))
+        f.write('Set target... 0.0 {!s} {!s}\r\n'.format(values[i], parameters[i]))
         f.write('Set target... {} {!s} {!s}\r\n'.format(length, values[i], parameters[i]))
 
     f.write('select Artword Individual{!s}\r\n'.format(index))
@@ -70,11 +74,8 @@ def artword_generator(index):
     f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
 
-# Generate n number of artwords
-index = 1
+def praat_cmd():
+    subprocess.run(['./praat', '--run', 'test.praat'])
 
 artword_generator(index)
-
-
-def praat_cmd():
-    subprocess.run(praat - -run)
+praat_cmd()
