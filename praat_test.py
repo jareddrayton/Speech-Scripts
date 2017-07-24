@@ -13,7 +13,6 @@ length = '1.0'
 # Generate n number of artwords
 index = 1
 
-
 # define praat location
 
 def artword_generator(index):
