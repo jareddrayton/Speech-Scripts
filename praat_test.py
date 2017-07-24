@@ -47,7 +47,7 @@ def artword_generator(index):
     [round(random.uniform(-1, 1), 1) for x in range(len(parameters))]
 
 
-    f = open("wdwd.praat", 'w')
+    f = open("test.praat", 'w')
 
     f.write("test")
     f.write("test")
@@ -59,7 +59,7 @@ def artword_generator(index):
     f.write('Set target... 0.00 1 LevatorPalatini\r\n')
     f.write('Set target... ' + length + ' 1 LevatorPalatini\r\n')
 
-    for i in range(len(self.parameters)):
+    for i in range(len(parameters)):
         f.seek(0, 2)
         f.write('Set target... 0.0 ' + str(self.values[i]) + ' ' + self.parameters[i] + '\r\n')
         f.write('Set target... ' + length + ' ' + str(self.values[i]) + ' ' + self.parameters[i] + '\r\n')
@@ -76,17 +76,5 @@ index = 1
 
 artword_generator(index)
 
-
-for i in range(0, n):
-    print(i)
-
-
-def parallel():
+def praat_cmd():
     subprocess.run(praat - -run)
-
-    pass
-
-
-artword_generator()
-
-print()
