@@ -7,11 +7,13 @@ import random
 import time
 
 # set number of artwords to be generated
-n = 4
+n = 10
 
 # set the duration of each artword sound
 duration = '1.0'
 
+# praat folder location
+praat_fp = 'Praat'
 
 def artword_generator(index):
     """This function generates a random artword/praat script"""
@@ -80,7 +82,7 @@ def praat_serial():
     start = time.time()
 
     for i in range(n):
-        subprocess.run(['./praat', '--run', 'test{!s}.praat'.format(i)])
+        subprocess.run(['./{}/praat'.format(praat_fp), '--run', 'test{!s}.praat'.format(i)])
 
     end = round(time.time() - start, 2)
 
@@ -94,7 +96,7 @@ def praat_parallel():
     start = time.time()
 
     for i in range(n):
-        p = subprocess.Popen(['./praat', '--run', 'test{!s}.praat'.format(i)])
+        p = subprocess.Popen(['./{}/praat'.format(praat_fp), '--run', 'test{!s}.praat'.format(i)])
 
     p.communicate()
 
