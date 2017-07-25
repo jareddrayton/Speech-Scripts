@@ -1,4 +1,4 @@
-# This script generates n random artwords with arbitray duration for synthesisng with praat.
+# This script generates n random artwords of a given duration for synthesisng with praat.
 # It is intended to give a rough estimate as to the single vs parallel performance.
 # Outputs a the total time, plus a rough how much faster than realtime simulation is.
 
@@ -8,7 +8,7 @@ import time
 import os
 import shutil
 
-# set number of artwords to be generated. should be equal to at least the number of threads
+# set number of artwords to be generated. should be equal to at least the number of threads available
 n = 20
 
 # set the duration of each artword sound
@@ -19,8 +19,6 @@ praat_fp = 'Praat'
 
 # set the name of the temporary directory
 temp_fp = 'temp'
-
-#test
 
 def artword_generator(index):
     """This function generates a random artword/praat script"""
