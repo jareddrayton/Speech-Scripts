@@ -5,15 +5,21 @@
 import subprocess
 import random
 import time
+import os
+import shutil
 
-# set number of artwords to be generated
-n = 10
+# set number of artwords to be generated. should be equal to at least the number of threads
+n = 20
 
 # set the duration of each artword sound
 duration = '1.0'
 
 # praat folder location
 praat_fp = 'Praat'
+
+# set the name of the temporary directory
+temp_fp = 'temp'
+
 
 def artword_generator(index):
     """This function generates a random artword/praat script"""
@@ -51,7 +57,7 @@ def artword_generator(index):
     values = [round(random.uniform(-1, 1), 1) for x in range(len(parameters))]
 
     # creates a text file with the .praat extension by calling open and assigns to variable f
-    f = open("test{}.praat".format(index), 'w')
+    f = open('./{}/test{}.praat'.format(temp_fp, index), 'w')
 
     f.write('Create Speaker... Robovox Male 2\r\n')
     f.write('Create Artword... Individual{!s} {}\r\n'.format(index, duration))
@@ -73,36 +79,49 @@ def artword_generator(index):
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
 
 
+os.mkdir(temp_fp)
+
 for i in range(n):
     artword_generator(i)
-
 
 def praat_serial():
 
     start = time.time()
 
     for i in range(n):
-        subprocess.run(['./{}/praat'.format(praat_fp), '--run', 'test{!s}.praat'.format(i)])
+        subprocess.run(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)])
 
     end = round(time.time() - start, 2)
 
     print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
-    print('This is equivalant to ', round(n * float(duration) / end, 2), 'x real time')
+    print('This is equivalent to ', round(n * float(duration) / end, 2), 'x real time')
 
 praat_serial()
+
+shutil.rmtree(temp_fp)
+
+
+os.mkdir(temp_fp)
+
+for i in range(n):
+    artword_generator(i)
 
 def praat_parallel():
 
     start = time.time()
 
     for i in range(n):
-        p = subprocess.Popen(['./{}/praat'.format(praat_fp), '--run', 'test{!s}.praat'.format(i)])
+        p = subprocess.Popen(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)])
 
     p.communicate()
 
     end = round(time.time() - start, 2)
 
     print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
-    print('This is equivalant to ', round(n * float(duration) / end, 2), 'x real time')
+    print('This is equivalent to ', round(n * float(duration) / end, 2), 'x real time')
+
+    time.sleep(4)
 
 praat_parallel()
+
+shutil.rmtree(temp_fp)
