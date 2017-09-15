@@ -9,6 +9,13 @@ import numpy as np
 
 
 
+# Pulse train
+
+def pulse_train():
+    pass
+
+# Rosenberg
+
 Tp = 0
 
 def rosenberg_a():
@@ -37,4 +44,10 @@ def rosenberg_f():
 
 
 
-# Pulse trains
+# Flanagan
+
+def flanagan_landgraf():
+    pass
+
+def ishizaka_flanagan():
+    pass
