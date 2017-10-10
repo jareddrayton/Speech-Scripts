@@ -9,7 +9,7 @@ import os
 import shutil
 
 # set number of artwords to be generated. should be equal to at least the number of threads available
-n = 25
+n = 20
 
 # set the duration of each artword sound
 duration = '1.0'
@@ -20,8 +20,9 @@ praat_fp = 'Praat'
 # set the name of the temporary directory
 temp_fp = 'temp'
 
+
 def artword_generator(index):
-    """This function generates a random artword/praat script"""
+    #This function generates a random artword/praat script
 
     # a list containing all of the articulator parameters barring lungs
     parameters = ['Interarytenoid',
@@ -105,12 +106,12 @@ def artword_generator_limited(index):
 
     f.write('Create Speaker... Robovox Male 2\r\n')
     f.write('Create Artword... Individual{!s} {}\r\n'.format(index, duration))
-    f.write('Set target... 0.0  0.2  Lungs\r\n')
+    f.write('Set target... 0.0  0.18  Lungs\r\n')
     f.write('Set target... 0.1  0.0  Lungs\r\n')
     f.write('Set target... {}   0.0  Lungs\r\n'.format(duration))
-    f.write('Set target... 0.00 1 LevatorPalatini\r\n')
+    f.write('Set target... 0.0 1 LevatorPalatini\r\n')
     f.write('Set target... {} 1 LevatorPalatini\r\n'.format(duration))
-    f.write('Set target... 0.00 0.5 Interarytenoid\r\n')
+    f.write('Set target... 0.0 0.5 Interarytenoid\r\n')
     f.write('Set target... {} 0.5 Interarytenoid\r\n'.format(duration))
 
     # a loop that
@@ -126,7 +127,6 @@ def artword_generator_limited(index):
 
 
 os.mkdir(temp_fp)
-
 
 for i in range(n):
     artword_generator_limited(i)
@@ -144,15 +144,7 @@ def praat_serial():
     print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
     print('This is equivalent to ', round(n * float(duration) / end, 2), 'x real time')
 
-#praat_serial()
 
-shutil.rmtree(temp_fp)
-
-
-os.mkdir(temp_fp)
-
-for i in range(n):
-    artword_generator(i)
 
 def praat_parallel():
 
@@ -170,6 +162,8 @@ def praat_parallel():
 
     time.sleep(4)
 
+
+#praat_serial()
 praat_parallel()
 
 #shutil.rmtree(temp_fp)
