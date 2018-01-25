@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.io.wavfile as wav
+import matplotlib.pyplot as plt
 
 # Start with implementing Rosenbergs models from 1971
 # "Effect of Glottal Pulse Shape on the Quality of Natural Vowels"
@@ -30,21 +31,39 @@ print(Tp, Tn, To)
 print(Tp + Tn + To)
 print(period_samples)
 
-#0 < t <= Tp
-#Tp <= t <= Tp + Tn
-
-data = []
-
 def rosenberg_a():
     
-    for i in range(1, Tp):
-        print(i)
-        print(amplitude * (i / Tp))
-    for i in range(Tp, Tp + Tn):
-        print(i)
-        print(amplitude(1- (i-)))
+    data = []
+    
+    for i in range(1, Tp): #0 < t <= Tp
+        #print(i)
+        #print(amplitude * (i / Tp))
+        data.append(amplitude * (i / Tp))
+
+    for i in range(Tp, Tp + Tn): #Tp <= t <= Tp + Tn
+        #print(i)
+        #print(amplitude * (1 - ((i-Tp)/Tn)))
+        data.append(amplitude * (1 - ((i-Tp)/Tn)))
+
+    for i in range(Tp + Tn, period_samples):
+        #print(i)
+        #print(i*0)
+        data.append(i*0)
+
+    test = list(map(int, data))
+    
+    print(test)
+    
+    return test
 
 rosenberg_a()
+
+def make_wav():
+    pass
+
+
+
+
 
 def rosenberg_b():
     pass
