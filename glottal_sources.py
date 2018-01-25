@@ -17,6 +17,8 @@ def pulse_train():
 
 # Rosenberg
 
+wav_length = 2.0 # Length of .Wav file defined in seconds
+
 amplitude = 32767
 sample_rate = 16000
 fundamental_frequency = 117
@@ -35,7 +37,7 @@ def rosenberg_a():
     
     data = []
     
-    for i in range(1, Tp): #0 < t <= Tp
+    for i in range(0, Tp): #0 < t <= Tp
         #print(i)
         #print(amplitude * (i / Tp))
         data.append(amplitude * (i / Tp))
@@ -52,16 +54,33 @@ def rosenberg_a():
 
     test = list(map(int, data))
     
+    print(len(test))
     print(test)
     
     return test
 
-rosenberg_a()
 
 def make_wav():
+    
+    buffer = rosenberg_a
+    
     pass
 
+make_wav()
 
+
+def make_plot():
+    fig, ax = plt.subplots()
+    ax.plot(rosenberg_a())
+
+    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+       title='About as simple as it gets, folks')
+    ax.grid()
+
+    #fig.savefig("test.png")
+    plt.show()
+
+make_plot()
 
 
 
