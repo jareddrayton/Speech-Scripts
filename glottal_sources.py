@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.io.wavfile as wav
 
 # Start with implementing Rosenbergs models from 1971
 # "Effect of Glottal Pulse Shape on the Quality of Natural Vowels"
@@ -17,19 +18,33 @@ def pulse_train():
 
 amplitude = 32767
 sample_rate = 16000
-fundamental_frequency = 120
+fundamental_frequency = 117
 
 period_samples = sample_rate // fundamental_frequency
 
-Tp = 0.4 * period_samples # length of slope in 
-Tn = 0.16
-To = 1 - Tp - Tn
+Tp = int(0.4 * period_samples) # length of slope in 
+Tn = int(0.16 * period_samples)
+To = int(period_samples - Tp - Tn)
+
+print(Tp, Tn, To)
+print(Tp + Tn + To)
+print(period_samples)
+
+#0 < t <= Tp
+#Tp <= t <= Tp + Tn
+
+data = []
 
 def rosenberg_a():
-    0 < t <= Tp
-    a = t/Tp
-    a * t / Tp
+    
+    for i in range(1, Tp):
+        print(i)
+        print(amplitude * (i / Tp))
+    for i in range(Tp, Tp + Tn):
+        print(i)
+        print(amplitude(1- (i-)))
 
+rosenberg_a()
 
 def rosenberg_b():
     pass
