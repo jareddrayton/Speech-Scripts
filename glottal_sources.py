@@ -116,7 +116,20 @@ def rosenberg_d():
 rosenberg_d()
 
 def rosenberg_e():
-    pass
+    data = []
+    
+    for i in range(0, Tp): # While 0 < t <= Tp
+        data.append(  amplitude * math.sin((i/Tp) * (math.pi/2))       )
+
+    for i in range(Tp, Tp + Tn): # While Tp <= t <= Tp + Tn
+        data.append( amplitude * math.cos( ((i-Tp)/Tn) * (math.pi/2) ) )
+    
+    for i in range(Tp + Tn, period_samples): # 
+        data.append(i*0)
+
+    data = list(map(int, data)) # Convert to integers
+    
+    return data
 
 def rosenberg_f():
     pass
@@ -172,8 +185,9 @@ def make_plot():
     fig, ax = plt.subplots()
     #ax.plot(rosenberg_a())
     #ax.plot(rosenberg_b())
-    #ax.plot(rosenberg_c())
-    ax.plot(rosenberg_d())
+    ax.plot(rosenberg_c())
+    #ax.plot(rosenberg_d())
+    ax.plot(rosenberg_e())
 
     ax.set(xlabel='time (s)', ylabel='Amplitude',
        title='About as simple as it gets, folks')
@@ -182,7 +196,7 @@ def make_plot():
     #fig.savefig("test.png")
     plt.show()
 
-#make_plot()
+make_plot()
 
 def plot_all():
     pass
