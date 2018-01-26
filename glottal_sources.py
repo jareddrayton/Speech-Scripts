@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 ###############################################################################
 # Rosenberg Variables
 
-wav_length = 10.0 # Specify the length of the .Wav file in seconds
+wav_length = 5.0 # Specify the length of the .Wav file in seconds
 
 amplitude = 32767 # Using 16 Bit PCM. This is 'a' in the original paper
-sample_rate = 44100 # 
+sample_rate = 44100 #
 fundamental_frequency = 119 #
 
 period_samples = sample_rate // fundamental_frequency # No. of samples used for one period
@@ -39,31 +39,22 @@ def rosenberg_a():
     data = []
     
     for i in range(0, Tp): # 0 < t <= Tp
-        #print(i)
-        #print(amplitude * (i / Tp))
         data.append(amplitude * (i / Tp))
 
     for i in range(Tp, Tp + Tn): #Tp <= t <= Tp + Tn
-        #print(i)
-        #print(amplitude * (1 - ((i-Tp)/Tn)))
         data.append(amplitude * (1 - ((i-Tp)/Tn)))
 
     for i in range(Tp + Tn, period_samples):
-        #print(i)
-        #print(i*0)
         data.append(i*0)
 
     data = list(map(int, data))
-    
-    #print(len(test))
-    #print(test)
     
     return data
 
 def rosenberg_b():
     
     data = []
-    
+
     for i in range(0, Tp): # While 0 < t <= Tp
         data.append(amplitude * ( 3 * (i/Tp) ** 2 - 2 * (i/Tp) ** 3))
 
@@ -86,7 +77,6 @@ def rosenberg_c():
 
     for i in range(Tp, Tp + Tn): # While Tp <= t <= Tp + Tn
         data.append( amplitude * math.cos( ((i-Tp)/Tn) * (math.pi/2) ) )
-        #print(amplitude, i, Tp, Tn,)
     
     for i in range(Tp + Tn, period_samples): # 
         data.append(i*0)
@@ -103,9 +93,8 @@ def rosenberg_d():
         data.append(    (amplitude/2.0) * (1 - math.cos((i/Tp) * math.pi)       ))
 
     for i in range(Tp, Tp + Tn): # While Tp <= t <= Tp + Tn
-        data.append( amplitude/2.0 * ( 1 + math.cos( ((i-Tp)/Tn) * (math.pi/2) ) ) )
-        #print(amplitude, i, Tp, Tn,)
-        #print( amplitude/2.0 * ( 1 + math.cos( ((i-Tp)/Tn) * (math.pi/2) ) ) )
+        data.append( (amplitude / 2) * ( 1 + math.cos( ((i-Tp)/Tn) * (math.pi) ) ) )
+
     for i in range(Tp + Tn, period_samples): # 
         data.append(i*0)
 
@@ -116,13 +105,14 @@ def rosenberg_d():
 rosenberg_d()
 
 def rosenberg_e():
+    
     data = []
     
     for i in range(0, Tp): # While 0 < t <= Tp
         data.append(  amplitude * math.sin((i/Tp) * (math.pi/2))       )
 
     for i in range(Tp, Tp + Tn): # While Tp <= t <= Tp + Tn
-        data.append( amplitude * math.cos( ((i-Tp)/Tn) * (math.pi/2) ) )
+        data.append(amplitude * math.cos(((i-Tp)/Tn) * (math.pi/2) ) )
     
     for i in range(Tp + Tn, period_samples): # 
         data.append(i*0)
@@ -132,7 +122,24 @@ def rosenberg_e():
     return data
 
 def rosenberg_f():
-    pass
+    
+    data = []
+    
+    for i in range(0, Tp): # While 0 < t <= Tp
+        if (3*amplitude/2) * (i/Tp) < amplitude:
+            data.append((3*amplitude/2) * (i/Tp))
+        else:
+            data.append(amplitude)
+
+    for i in range(Tp, Tp + Tn): # While Tp <= t <= Tp + Tn
+        data.append((amplitude) * (1- ((i - Tp)/Tn ) ))
+    
+    for i in range(Tp + Tn, period_samples): # 
+        data.append(i*0)
+
+    data = list(map(int, data)) # Convert to integers
+    
+    return data
 
 ###############################################################################
 # Pulse trains
@@ -160,7 +167,7 @@ def ishizaka_flanagan():
 
 def make_wav():
     
-    buffer = rosenberg_a()
+    buffer = rosenberg_f()
 
     iterations = int((sample_rate * wav_length) / period_samples) # calculate number of times need to use buffer
 
@@ -174,20 +181,16 @@ def make_wav():
     print('WARNING: File will be short by ', 
         int(sample_rate * wav_length) - a.size, 'samples')
 
-    wav.write('test_a.wav', sample_rate, a) # Writes the numpy array to a .wav file
+    wav.write('test_fa.wav', sample_rate, a) # Writes the numpy array to a .wav file
 
-#make_wav()
+make_wav()
 
 ###############################################################################
 # Plotting functions
 
 def make_plot():
     fig, ax = plt.subplots()
-    #ax.plot(rosenberg_a())
-    #ax.plot(rosenberg_b())
-    ax.plot(rosenberg_c())
-    #ax.plot(rosenberg_d())
-    ax.plot(rosenberg_e())
+    ax.plot(rosenberg_a())
 
     ax.set(xlabel='time (s)', ylabel='Amplitude',
        title='About as simple as it gets, folks')
@@ -199,4 +202,19 @@ def make_plot():
 make_plot()
 
 def plot_all():
-    pass
+    fig, ax = plt.subplots()
+    ax.plot(rosenberg_a())
+    ax.plot(rosenberg_b())
+    ax.plot(rosenberg_c())
+    ax.plot(rosenberg_d())
+    ax.plot(rosenberg_e())
+    ax.plot(rosenberg_f())
+
+    ax.set(xlabel='time (s)', ylabel='Amplitude',
+       title='About as simple as it gets, folks')
+    ax.grid()
+
+    #fig.savefig("test.png")
+    plt.show()
+
+plot_all()
