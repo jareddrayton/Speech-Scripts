@@ -57,7 +57,24 @@ def rosenberg_a():
     return test
 
 def rosenberg_b():
-    pass
+    
+    data = []
+    
+    for i in range(0, Tp): # 0 < t <= Tp
+        data.append(amplitude * ( 3 * (i/Tp) ** 2 - 2 * (i/Tp) ** 3))
+
+    for i in range(Tp, Tp + Tn): #Tp <= t <= Tp + Tn
+        data.append(amplitude * (1 - ((i-Tp)/Tn)**2))
+
+    for i in range(Tp + Tn, period_samples): # 
+        data.append(i*0)
+
+    test = list(map(int, data))
+    
+    #print(len(test))
+    #print(test)
+    
+    return test
 
 def rosenberg_c():
     pass
@@ -112,18 +129,24 @@ def make_wav():
 
     wav.write('test_1.wav', sample_rate, a) # Writes the numpy array to a .wav file
 
-make_wav()
+#make_wav()
 
+###############################################################################
+# Plotting functions
 
 def make_plot():
     fig, ax = plt.subplots()
     ax.plot(rosenberg_a())
+    ax.plot(rosenberg_b())
 
-    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+    ax.set(xlabel='time (s)', ylabel='Amplitude',
        title='About as simple as it gets, folks')
     ax.grid()
 
     #fig.savefig("test.png")
     plt.show()
 
-#make_plot()
+make_plot()
+
+def plot_all():
+    pass
