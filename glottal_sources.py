@@ -53,8 +53,8 @@ def rosenberg_a():
 
     test = list(map(int, data))
     
-    print(len(test))
-    print(test)
+    #print(len(test))
+    #print(test)
     
     return test
 
@@ -99,13 +99,26 @@ def make_wav():
     
     buffer = rosenberg_a()
 
-    iterations = (sample_rate * wav_length) / period_samples # calculate nnumber of times need to use buffer
-    print(iterations)
-    np.asarray(buffer)
-    print(np.asarray(buffer))
+    iterations = int((sample_rate * wav_length) / period_samples) # calculate nnumber of times need to use buffer
+    #print(iterations)
+    
+    #print(np.asarray(buffer))
 
-    for in range(iterations):
-        np,concatenate()
+    a = np.array([])
+    b = np.asarray(buffer)
+
+    print(iterations)
+    print(np.tile(b, 2))
+    
+    a = np.tile(b, iterations)
+    print(a.size)
+
+    print(sample_rate * wav_length)
+
+    #for i in range(iterations):
+    #    np.concatenate((a, b), axis=1)
+    
+    
     
 make_wav()
 
