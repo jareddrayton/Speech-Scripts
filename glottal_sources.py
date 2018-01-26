@@ -105,21 +105,20 @@ def make_wav():
     #print(np.asarray(buffer))
 
     a = np.array([])
-    b = np.asarray(buffer)
+    b = np.asarray(buffer, dtype=np.int16)
 
     print(iterations)
     print(np.tile(b, 2))
     
     a = np.tile(b, iterations)
     print(a.size)
+    print(a.dtype.name)
 
     print(sample_rate * wav_length)
+    #int16
+    
+    wav.write('test_1.wav', sample_rate, a)
 
-    #for i in range(iterations):
-    #    np.concatenate((a, b), axis=1)
-    
-    
-    
 make_wav()
 
 
