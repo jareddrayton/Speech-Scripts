@@ -9,19 +9,14 @@ import matplotlib.pyplot as plt
 # Put in desired length of audio, waveform type, F0
 # How is this used as a module? e.g. with a vocal tract model.
 
-# Pulse train
+###############################################################################
+# Global Variables
 
-def pulse_train():
-    pass
-
-
-# Rosenberg
-
-wav_length = 2.0 # Length of .Wav file defined in seconds
+wav_length = 2.0 # Specify the length of the .Wav file in seconds
 
 amplitude = 32767
 sample_rate = 16000
-fundamental_frequency = 117
+fundamental_frequency = 115
 
 period_samples = sample_rate // fundamental_frequency
 
@@ -33,11 +28,15 @@ print(Tp, Tn, To)
 print(Tp + Tn + To)
 print(period_samples)
 
+###############################################################################
+
+# Rosenberg
+
 def rosenberg_a():
     
     data = []
     
-    for i in range(0, Tp): #0 < t <= Tp
+    for i in range(0, Tp): # 0 < t <= Tp
         #print(i)
         #print(amplitude * (i / Tp))
         data.append(amplitude * (i / Tp))
@@ -59,31 +58,6 @@ def rosenberg_a():
     
     return test
 
-
-def make_wav():
-    
-    buffer = rosenberg_a
-    
-    pass
-
-make_wav()
-
-
-def make_plot():
-    fig, ax = plt.subplots()
-    ax.plot(rosenberg_a())
-
-    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-       title='About as simple as it gets, folks')
-    ax.grid()
-
-    #fig.savefig("test.png")
-    plt.show()
-
-make_plot()
-
-
-
 def rosenberg_b():
     pass
 
@@ -99,12 +73,15 @@ def rosenberg_e():
 def rosenberg_f():
     pass
 
+# Pulse train
+
+def pulse_train():
+    pass
 
 # LF model
 
 def lf():
     pass
-
 
 # Flanagan
 
@@ -113,3 +90,35 @@ def flanagan_landgraf():
 
 def ishizaka_flanagan():
     pass
+
+
+###############################################################################
+# Helper functions
+
+def make_wav():
+    
+    buffer = rosenberg_a()
+
+    iterations = (sample_rate * wav_length) / period_samples # calculate nnumber of times need to use buffer
+    print(iterations)
+    np.asarray(buffer)
+    print(np.asarray(buffer))
+
+    for in range(iterations):
+        np,concatenate()
+    
+make_wav()
+
+
+def make_plot():
+    fig, ax = plt.subplots()
+    ax.plot(rosenberg_a())
+
+    ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+       title='About as simple as it gets, folks')
+    ax.grid()
+
+    #fig.savefig("test.png")
+    plt.show()
+
+#make_plot()
