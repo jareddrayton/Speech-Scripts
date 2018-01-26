@@ -6,17 +6,16 @@ import matplotlib.pyplot as plt
 # "Effect of Glottal Pulse Shape on the Quality of Natural Vowels"
 # What is useful output?
 # Could use as a command line application.
-# Put in desired length of audio, waveform type, F0
 # How is this used as a module? e.g. with a vocal tract model.
 
 ###############################################################################
-# Global Variables
+# Rosenberg Variables
 
-wav_length = 2.0 # Specify the length of the .Wav file in seconds
+wav_length = 10.0 # Specify the length of the .Wav file in seconds
 
-amplitude = 32767
-sample_rate = 16000
-fundamental_frequency = 115
+amplitude = 32767 # Using 16 Bit PCM. This is just 'a' in the original paper
+sample_rate = 44100 # 
+fundamental_frequency = 119 #
 
 period_samples = sample_rate // fundamental_frequency
 
@@ -29,7 +28,6 @@ print(Tp + Tn + To)
 print(period_samples)
 
 ###############################################################################
-
 # Rosenberg
 
 def rosenberg_a():
@@ -73,7 +71,8 @@ def rosenberg_e():
 def rosenberg_f():
     pass
 
-# Pulse train
+###############################################################################
+# Pulse trains
 
 def pulse_train():
     pass
@@ -99,25 +98,19 @@ def make_wav():
     
     buffer = rosenberg_a()
 
-    iterations = int((sample_rate * wav_length) / period_samples) # calculate nnumber of times need to use buffer
-    #print(iterations)
+    iterations = int((sample_rate * wav_length) / period_samples) # calculate number of times need to use buffer
+
+    b = np.asarray(buffer, dtype=np.int16) # Sets data type to int16 for 16 Bit PCM
     
-    #print(np.asarray(buffer))
-
-    a = np.array([])
-    b = np.asarray(buffer, dtype=np.int16)
-
+    a = np.tile(b, iterations) # Use tile function to duplicate the buffer
+    
     print(iterations)
-    print(np.tile(b, 2))
-    
-    a = np.tile(b, iterations)
     print(a.size)
-    print(a.dtype.name)
 
-    print(sample_rate * wav_length)
-    #int16
-    
-    wav.write('test_1.wav', sample_rate, a)
+    print('WARNING: File will be short by ', 
+        int(sample_rate * wav_length) - a.size, 'samples')
+
+    wav.write('test_1.wav', sample_rate, a) # Writes the numpy array to a .wav file
 
 make_wav()
 
