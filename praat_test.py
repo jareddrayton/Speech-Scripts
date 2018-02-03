@@ -8,6 +8,9 @@ import time
 import os
 import shutil
 
+import multiprocessing
+from concurrent import futures
+
 # set number of artwords to be generated. should be equal to at least the number of threads available
 n = 20
 
@@ -133,28 +136,21 @@ for i in range(n):
 
 
 def praat_serial():
-
     start = time.time()
-
     for i in range(n):
         subprocess.run(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)])
-
     end = round(time.time() - start, 2)
 
     print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
     print('This is equivalent to ', round(n * float(duration) / end, 2), 'x real time')
 
 
-
 def praat_parallel():
-
     start = time.time()
-
     for i in range(n):
         p = subprocess.Popen(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)])
 
     p.communicate()
-
     end = round(time.time() - start, 2)
 
     print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
@@ -162,8 +158,21 @@ def praat_parallel():
 
     time.sleep(4)
 
+def running(i):    
+    subprocess.call(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)])
 
-#praat_serial()
+def pool_setup(n):
+    start = time.time()
+    ex = futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
+    ex.map(running, [i for i in range(n)])
+    ex.shutdown()
+    end = round(time.time() - start, 2)
+    
+    print('Total time to synthesise {!s} sounds of duration {} in seconds = {!s}'.format(n, duration, end))
+    print('This is equivalent to ', round(n * float(duration) / end, 2), 'x real time')
+
+
+#pool_setup(n)
+
 praat_parallel()
-
-#shutil.rmtree(temp_fp)
+shutil.rmtree(temp_fp)
