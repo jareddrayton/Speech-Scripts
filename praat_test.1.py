@@ -72,6 +72,20 @@ def artword_generator_limited(index):
     f.write('plus Speaker Robovox\r\n')
     f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
+    f.write('''selectObject ("Sound Individual''' + str(i) + '''_Robovox")\r\n''')
+    f.write('To Formant (burg): 0, 5, 5000, 1.0, 50\r\n')
+    f.write('List: "no", "yes", 6, "no", 3, "no", 3, "no"\r\n')
+    f.write('''appendFile ("formants''' + str(i) + '''.txt", info$ ())\r\n''')
+    f.write('''selectObject ("Sound Individual''' + str(i) + '''_Robovox")\r\n''')
+    f.write('To Pitch: 1.0, 75, 600\r\n')
+    f.write('Get mean: 0, 0, "Hertz"\r\n')
+    f.write('''appendFile ("pitch''' + str(i) + '''.txt", info$ ())\r\n''')
+    f.write('''selectObject ("Sound Individual''' + str(i) + '''_Robovox")\r\n''')
+    f.write('To Intensity: 100, 0, "yes"\r\n')
+    f.write('Get standard deviation: 0, 0\r\n')
+    f.write('''appendFile ("intensity''' + str(i) + '''.txt", info$ ())\r\n''')
+
+
 
 for i in range(n):
     artword_generator_limited(i)
@@ -90,14 +104,3 @@ pool_setup(n)
 
 Test commit
 
-"""
-if __name__ == '__main__':
-    def running(i):    
-        subprocess.call(['Praat/Praat.exe', '--run', '/temp/test{!s}.praat'.format(i)])
-
-    def pool_setup(n):
-        p = Pool(multiprocessing.cpu_count())
-        p.map(running, [i for i in range(n)])
-        p.join()
-    pool_setup(n)
-"""

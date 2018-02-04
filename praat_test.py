@@ -12,7 +12,7 @@ import multiprocessing
 from concurrent import futures
 
 # set number of artwords to be generated. should be equal to at least the number of threads available
-n = 20
+n = 10
 
 # set the duration of each artword sound
 duration = '1.0'
@@ -80,6 +80,22 @@ def artword_generator(index):
     f.write('plus Speaker Robovox\r\n')
     f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
+    f.write('select Artword Individual{!s}\r\n'.format(index))
+    f.write('plus Speaker Robovox\r\n')
+    f.write('To Sound... 22500 25    0 0 0    0 0 0   0 0 0\r\n')
+    f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
+    f.write('''selectObject ("Sound Individual''' + str(index) + '''_Robovox")\r\n''')
+    f.write('To Formant (burg): 0, 5, 5000, 1.0, 50\r\n')
+    f.write('List: "no", "yes", 6, "no", 3, "no", 3, "no"\r\n')
+    f.write('''appendFile ("formants''' + str(index) + '''.txt", info$ ())\r\n''')
+    f.write('''selectObject ("Sound Individual''' + str(index) + '''_Robovox")\r\n''')
+    f.write('To Pitch: 1.0, 75, 600\r\n')
+    f.write('Get mean: 0, 0, "Hertz"\r\n')
+    f.write('''appendFile ("pitch''' + str(index) + '''.txt", info$ ())\r\n''')
+    f.write('''selectObject ("Sound Individual''' + str(index) + '''_Robovox")\r\n''')
+    f.write('To Intensity: 100, 0, "yes"\r\n')
+    f.write('Get standard deviation: 0, 0\r\n')
+    f.write('''appendFile ("intensity''' + str(index) + '''.txt", info$ ())\r\n''')
 
 
 def artword_generator_limited(index):
@@ -129,10 +145,7 @@ def artword_generator_limited(index):
     f.write('''nowarn do ("Save as WAV file...", "Individual{!s}.wav")\r\n'''.format(index))
 
 
-os.mkdir(temp_fp)
 
-for i in range(n):
-    artword_generator_limited(i)
 
 
 def praat_serial():
@@ -159,7 +172,7 @@ def praat_parallel():
     time.sleep(4)
 
 def running(i):    
-    subprocess.call(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)])
+    subprocess.call(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)], stdout=subprocess.DEVNULL)
 
 def pool_setup(n):
     start = time.time()
@@ -172,7 +185,9 @@ def pool_setup(n):
     print('This is equivalent to ', round(n * float(duration) / end, 2), 'x real time')
 
 
-#pool_setup(n)
+os.mkdir(temp_fp)
+for i in range(n):
+    artword_generator(i)
 
-praat_parallel()
+pool_setup(n)
 shutil.rmtree(temp_fp)
