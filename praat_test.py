@@ -172,7 +172,7 @@ def praat_parallel():
     time.sleep(4)
 
 def running(i):    
-    subprocess.call(['./{}/praat'.format(praat_fp), '--run', './{}/test{!s}.praat'.format(temp_fp,i)], stdout=subprocess.DEVNULL)
+    subprocess.call(['./{}/praat'.format(praat_fp), '--run', '--ansi', './{}/test{!s}.praat'.format(temp_fp,i)], stdout=subprocess.DEVNULL)
 
 def pool_setup(n):
     start = time.time()
