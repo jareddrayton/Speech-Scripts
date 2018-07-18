@@ -68,3 +68,4 @@ Sounds
 # Executables
 *.exe
 *.bat
+.vscode/settings.json
