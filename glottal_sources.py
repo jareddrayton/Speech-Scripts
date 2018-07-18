@@ -211,10 +211,10 @@ def plot_all():
     ax.plot(rosenberg_f())
 
     ax.set(xlabel='time (s)', ylabel='Amplitude',
-       title='About as simple as it gets, folks')
+       title='Rosenberg Pulses')
     ax.grid()
 
-    #fig.savefig("test.png")
+    fig.savefig("rosenberg.png")
     plt.show()
 
 plot_all()

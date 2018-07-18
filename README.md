@@ -1,2 +1,6 @@
-# Speech-Scripts
-A collection of speech processing and synthesis related scripts written in Python.
+## Speech-Scripts
+Some random scripts related to speech synthesis written in Python.
+
+## Glottal Sources
+
+![Rosenberg](https://octodex.github.com/images/rosenberg.png)
