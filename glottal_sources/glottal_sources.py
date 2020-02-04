@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 ###############################################################################
 # Rosenberg Variables
 
-wav_length = 5.0 # Specify the length of the .Wav file in seconds
+wav_length = 5.0 # Specify the length of the .wav file in seconds
 
 amplitude = 32767 # Using 16 Bit PCM. This is 'a' in the original paper
 sample_rate = 44100 #
@@ -167,7 +167,7 @@ def ishizaka_flanagan():
 
 def make_wav():
     
-    buffer = rosenberg_f()
+    buffer = rosenberg_b()
 
     iterations = int((sample_rate * wav_length) / period_samples) # calculate number of times need to use buffer
 
@@ -181,7 +181,7 @@ def make_wav():
     print('WARNING: File will be short by ', 
         int(sample_rate * wav_length) - a.size, 'samples')
 
-    wav.write('test_fa.wav', sample_rate, a) # Writes the numpy array to a .wav file
+    wav.write('test_a.wav', sample_rate, a) # Writes the numpy array to a .wav file
 
 make_wav()
 
